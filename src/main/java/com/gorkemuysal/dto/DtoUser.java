@@ -5,11 +5,15 @@ import com.gorkemuysal.enums.RoleName;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class DtoUser {
 	private Long id;
 
-	private String user_name;
+	private String username;
 
 	private String email;
 

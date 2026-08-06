@@ -2,14 +2,17 @@ package com.gorkemuysal.service.impl;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.gorkemuysal.dto.DtoUser;
 import com.gorkemuysal.dto.RegisterRequest;
 import com.gorkemuysal.entity.User;
 import com.gorkemuysal.enums.RoleName;
 import com.gorkemuysal.repository.UserRepository;
+import com.gorkemuysal.service.IUserService;
 
-public class UserService {
+@Service
+public class UserService implements IUserService {
 
 	private final UserRepository userRepository;
 
@@ -21,7 +24,7 @@ public class UserService {
 	}
 
 	public DtoUser register(RegisterRequest request) {
-		if (userRepository.existsByUsername(request.getUserName())) {
+		if (userRepository.existsByUsername(request.getUsername())) {
 			throw new IllegalArgumentException("This username is already in use.");
 		}
 		if (userRepository.existsByEmail(request.getEmail())) {
@@ -29,8 +32,12 @@ public class UserService {
 		}
 
 		User user = new User();
-		user.setUsername(request.getUserName());
+		System.out.println("name: " + request.getUsername());
+		System.out.println("EMAIL: " + request.getEmail());
+		System.out.println("password: " + request.getPassword());
+		user.setUsername(request.getUsername());
 		user.setEmail(request.getEmail());
+	
 		user.setPassword(passwordEncoder.encode(request.getPassword()));
 		user.setRole(RoleName.USER);
 		
@@ -46,7 +53,6 @@ public class UserService {
 		
 		DtoUser dto = new DtoUser();
 		BeanUtils.copyProperties(user, dto);
-		
 		
 		return dto;
 	}
