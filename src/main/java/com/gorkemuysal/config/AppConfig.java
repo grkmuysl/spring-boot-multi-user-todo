@@ -1,7 +1,5 @@
 package com.gorkemuysal.config;
 
-import java.util.Optional;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -32,14 +30,9 @@ public class AppConfig {
 
 			@Override
 			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				Optional<UserDetailsImpl> optional = userRepository.findByUsername(username);
-
-				if (optional.isPresent()) {
-					return optional.get();
-				}
-
-				return null;
-
+				return userRepository.findByUsername(username)
+						.map(UserDetailsImpl::new)
+						.orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 			}
 		};
 	}

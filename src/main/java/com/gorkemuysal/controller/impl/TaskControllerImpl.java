@@ -9,9 +9,6 @@ import com.gorkemuysal.controller.ITaskController;
 import com.gorkemuysal.dto.DtoTask;
 import com.gorkemuysal.service.ITaskService;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotEmpty;
-
 @RestController
 @RequestMapping("/task")
 public class TaskControllerImpl implements ITaskController {
@@ -24,7 +21,7 @@ public class TaskControllerImpl implements ITaskController {
 
 	@GetMapping("/list/{id}")
 	@Override
-	public DtoTask findTaskById(@Valid @NotEmpty @PathVariable(value = "id") Long id) {
+	public DtoTask findTaskById(@PathVariable(value = "id") Long id) {
 		return taskService.findTaskById(id);
 
 	}

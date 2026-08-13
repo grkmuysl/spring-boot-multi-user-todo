@@ -8,7 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.gorkemuysal.controller.IAuthController;
 import com.gorkemuysal.dto.DtoUser;
 import com.gorkemuysal.dto.RegisterRequest;
+import com.gorkemuysal.jwt.AuthResponse;
 import com.gorkemuysal.service.IUserService;
+
+import jakarta.validation.Valid;
 
 
 
@@ -28,6 +31,14 @@ public class AuthController implements IAuthController {
 		DtoUser savedUser = userService.register(request);
 		
 		return ResponseEntity.ok("Register successfully: " + savedUser.getUsername());
+	}
+
+	@PostMapping("/auth")
+	@Override
+	public AuthResponse authenticate(@Valid @RequestBody RegisterRequest request) {
+		
+		
+		return userService.authenticate(request);
 	}
 
 }
