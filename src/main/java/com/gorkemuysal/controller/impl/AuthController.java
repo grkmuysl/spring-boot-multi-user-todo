@@ -3,7 +3,6 @@ package com.gorkemuysal.controller.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gorkemuysal.controller.IAuthController;
@@ -14,7 +13,6 @@ import com.gorkemuysal.service.IUserService;
 
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController implements IAuthController {
 
 	private final IUserService userService;
