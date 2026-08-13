@@ -3,18 +3,19 @@ package com.gorkemuysal.controller.impl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.gorkemuysal.controller.IAuthController;
 import com.gorkemuysal.dto.DtoUser;
 import com.gorkemuysal.dto.RegisterRequest;
+import com.gorkemuysal.jwt.AuthResponse;
 import com.gorkemuysal.service.IUserService;
+
+import jakarta.validation.Valid;
 
 
 
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController implements IAuthController {
 
 	private final IUserService userService;
@@ -30,6 +31,14 @@ public class AuthController implements IAuthController {
 		DtoUser savedUser = userService.register(request);
 		
 		return ResponseEntity.ok("Register successfully: " + savedUser.getUsername());
+	}
+
+	@PostMapping("/auth")
+	@Override
+	public AuthResponse authenticate(@Valid @RequestBody RegisterRequest request) {
+		
+		
+		return userService.authenticate(request);
 	}
 
 }
