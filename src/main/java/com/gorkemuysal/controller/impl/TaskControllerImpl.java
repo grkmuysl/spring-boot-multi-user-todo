@@ -1,7 +1,8 @@
 package com.gorkemuysal.controller.impl;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,9 +42,10 @@ public class TaskControllerImpl implements ITaskController {
 
 	@GetMapping("/list")
 	@Override
-	public ResponseEntity<List<TaskResponse>> getAllTaskForUser(@AuthenticationPrincipal UserDetailsImpl userDetails) {
+	public ResponseEntity<Page<TaskResponse>> getAllTaskForUser(@AuthenticationPrincipal UserDetailsImpl userDetails,
+			@PageableDefault(size = 10, sort = "id") Pageable pageable) {
 
-		return ResponseEntity.ok(taskService.getAllTaskForUser(userDetails.getId()));
+		return ResponseEntity.ok(taskService.getAllTaskForUser(userDetails.getId(), pageable));
 	}
 
 	@GetMapping("/{id}")
