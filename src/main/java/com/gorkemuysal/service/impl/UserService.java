@@ -38,23 +38,18 @@ public class UserService implements IUserService {
 	@Override
 	public AuthResponse authenticate(RegisterRequest request) {
 
-		try {
-			UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(request.getUsername(),
-					request.getPassword());
-			authenticationProvider.authenticate(auth);
 
-			User user = userRepository.findByUsername(request.getUsername())
-					.orElseThrow(() -> new IllegalArgumentException("User not found"));
+		  UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
+		            request.getUsername(),
+		            request.getPassword());
 
-			String token = jwtService.generateToken(new UserDetailsImpl(user));
+		    authenticationProvider.authenticate(auth); 
 
-			return new AuthResponse(token);
+		    User user = userRepository.findByUsername(request.getUsername())
+		            .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
-		} catch (Exception e) {
-			System.out.println("username or password is invalid" + e.getMessage());
-		}
-
-		return null;
+		    String token = jwtService.generateToken(new UserDetailsImpl(user));
+		    return new AuthResponse(token);
 	}
 
 	public DtoUser register(RegisterRequest request) {
