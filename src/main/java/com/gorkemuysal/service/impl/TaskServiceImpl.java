@@ -1,15 +1,12 @@
 package com.gorkemuysal.service.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
-import com.gorkemuysal.dto.DtoTask;
-import com.gorkemuysal.dto.DtoUser;
 import com.gorkemuysal.dto.TaskRequest;
 import com.gorkemuysal.dto.TaskResponse;
 import com.gorkemuysal.entity.Task;
@@ -47,19 +44,10 @@ public class TaskServiceImpl implements ITaskService {
 	}
 
 	@Override
-	public List<TaskResponse> getAllTaskForUser(Long userId) {
+	public Page<TaskResponse> getAllTaskForUser(Long userId , Pageable pageable) {
 
-		List<TaskResponse> reponseList = new ArrayList<>();
-		List<Task> taskList = taskRepository.findByUserId(userId);
-
-		if (taskList.isEmpty())
-			return null;
-
-		for (Task task : taskList) {
-			reponseList.add(mapToResponse(task));
-		}
-
-		return reponseList;
+		 return taskRepository.findByUserId(userId, pageable)
+		            .map(this::mapToResponse);
 	}
 
 	@Override
