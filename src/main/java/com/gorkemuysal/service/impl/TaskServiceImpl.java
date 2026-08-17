@@ -39,26 +39,21 @@ public class TaskServiceImpl implements ITaskService {
 		task.setUser(user);
 
 		Task saved = taskRepository.save(task);
-		return mapToResponse(task);
+		return mapToResponse(saved);
 
 	}
 
 	@Override
-	public Page<TaskResponse> getAllTaskForUser(Long userId , Pageable pageable) {
+	public Page<TaskResponse> getAllTaskForUser(Long userId, Pageable pageable) {
 
-		 return taskRepository.findByUserId(userId, pageable)
-		            .map(this::mapToResponse);
+		return taskRepository.findByUserId(userId, pageable).map(this::mapToResponse);
 	}
 
 	@Override
 	public TaskResponse getTaskById(Long taskId, Long userId) {
-
-		Optional<Task> optional = taskRepository.findByIdAndUserId(taskId, userId);
-
-		if (!optional.isPresent())
-			return null;
-
-		return mapToResponse(optional.get());
+		Task task = taskRepository.findByIdAndUserId(taskId, userId)
+				.orElseThrow(() -> new AccessDeniedException("This task does not belong to you or was not found."));
+		return mapToResponse(task);
 	}
 
 	@Override
@@ -79,14 +74,14 @@ public class TaskServiceImpl implements ITaskService {
 
 	@Override
 	public void deleteTask(Long taskId, Long userId) {
-		
+
 		Task task = taskRepository.findByIdAndUserId(taskId, userId)
 				.orElseThrow(() -> new AccessDeniedException("This task does not belong to you or was not found."));
 
 		taskRepository.delete(task);
-		
+
 	}
-	
+
 	private TaskResponse mapToResponse(Task task) {
 		TaskResponse response = new TaskResponse();
 		response.setId(task.getId());
@@ -96,7 +91,5 @@ public class TaskServiceImpl implements ITaskService {
 		response.setDueDate(task.getDueDate());
 		return response;
 	}
-
-	
 
 }
